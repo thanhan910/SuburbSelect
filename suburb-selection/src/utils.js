@@ -5,7 +5,7 @@
  * @returns {string} The generated CSV string.
  */
 const generateCSVString = (data, headers) => {
-  const csvRows = [headers.join(','), ...data.map(row => headers.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))];
+  const csvRows = [headers.join(','), ...data.map(row => headers.map(fieldName => JSON.stringify(row[fieldName])).join(','))];
   return csvRows.join('\r\n');
 };
 

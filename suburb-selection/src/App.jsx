@@ -39,6 +39,7 @@ function App() {
         <SuburbsTable
           suburbs={suburbs}
           selectedSuburbs={selectedSuburbs}
+          postcodeData={postcodeData}
           toggleSuburbSelection={toggleSuburbSelection}
         />
         <PostcodesTable
@@ -48,7 +49,7 @@ function App() {
           toggleSuburbSelection={toggleSuburbSelection}
         />
       </div>
-      <MapContainer center={[-37.8136, 144.9631]} zoom={10} style={{ height: "100vh", width: "100%", float: "right" }}>
+      <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
