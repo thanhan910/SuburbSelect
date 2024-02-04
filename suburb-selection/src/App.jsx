@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SuburbsTable from './SuburbsTable';
 import PostcodesTable from './PostcodesTable';
@@ -78,7 +78,11 @@ function App() {
                 fillOpacity: selected ? 0.5 : 0,
               })
             }}
-          />
+          >
+            <Tooltip>
+              {suburb.properties.vic_loca_2}, {postcodeData[`${suburb.properties.vic_loca_2},VIC`] || 'VIC'}
+            </Tooltip>
+          </GeoJSON>
         ))}
       </MapContainer>
     </div>
