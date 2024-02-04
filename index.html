@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Polygon Selector</title>
+    <title>Suburb Selector</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #mapid {
@@ -12,8 +12,26 @@
 </head>
 
 <body>
-    <div id="mapid"></div>
-    <button id="download">Download Selected IDs</button>
+    <div style="display: flex; flex-direction: row; height: 700px;">
+        <div style="flex-grow: 0; flex-direction: column;">
+            <button id="download">Download Selected IDs</button>
+            <!-- Make width fit and not spanned -->
+            <div id="suburbTableContainer" style="height: 400px; overflow-y: scroll; flex-grow: 1; width: auto; max-width: fit-content;">
+                <table id="suburbTable">
+                    <thead>
+                        <tr>
+                            <th>Suburb</th>
+                            <th>Check</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="mapid" style="flex-grow: 1; width: 0; height: 700px;"></div>
+    </div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="app.js"></script>
     <script src="train.js"></script>

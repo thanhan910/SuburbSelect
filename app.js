@@ -28,11 +28,35 @@ fetch('postcode-data.json')
   });
 
 
+var tableBody = document.getElementById('suburbTable').getElementsByTagName('tbody')[0];
 
 
 
-// Then, when adding the GeoJSON to the map, include the onEachFeature option
+// When adding the GeoJSON to the map, include the onEachFeature option
 loadGeoJson('suburb-10-vic.geojson').then(data => {
+  // Sort the suburbs by name
+  data.features.sort((a, b) => a.properties.vic_loca_2.localeCompare(b.properties.vic_loca_2));
+
+  // Add the suburbs to the table
+  data.features.forEach(feature => {
+    const row = tableBody.insertRow();
+    const nameCell = row.insertCell(0);
+    const checkCell = row.insertCell(1);
+    const suburbKey = `${feature.properties.vic_loca_2.toUpperCase()},VIC`; // Ensure matching format
+    const postcode = suburbPostcodes[suburbKey];
+    nameCell.innerHTML = `${feature.properties.vic_loca_2} ${postcode}`
+    checkCell.innerHTML = `<input type="checkbox" id="suburbCheckbox_${feature.properties.loc_pid}" />`;
+
+    // Add event listener to the checkbox
+    document.querySelector(`#suburbCheckbox_${feature.properties.loc_pid}`).addEventListener('change', function () {
+      if (this.checked) {
+        tableBody.prepend(row); // Move row to the top
+      } else {
+        tableBody.appendChild(row); // Move row to its original position or to the bottom
+      }
+    });
+  });
+
   var geoJsonLayer = L.geoJson(data, {
     style: function (feature) {
       return {
@@ -88,6 +112,19 @@ loadGeoJson('suburb-10-vic.geojson').then(data => {
                 fillColor: '#ff7800',
                 fillOpacity: 0.5
               }); // Select style
+            }
+
+            const checkbox = document.querySelector(`#suburbCheckbox_${feature.properties.loc_pid}`);
+
+            if (checkbox) {
+              checkbox.checked = !checkbox.checked;
+            }
+
+            const row = document.querySelector(`#suburbCheckbox_${feature.properties.loc_pid}`).parentNode.parentNode;
+            if (checkbox.checked) {
+              tableBody.prepend(row); // Move row to the top
+            } else {
+              tableBody.appendChild(row); // Move row to its original position or to the bottom
             }
           }
         });
