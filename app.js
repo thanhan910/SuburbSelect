@@ -34,29 +34,33 @@ fetch('postcode-data.json')
 // Then, when adding the GeoJSON to the map, include the onEachFeature option
 loadGeoJson('suburb-10-vic.geojson').then(data => {
   var geoJsonLayer = L.geoJson(data, {
+    style: function (feature) {
+      return {
+        weight: 1,
+        opacity: 1,
+        color: 'black',
+        fillOpacity: 0
+      };
+    },
     onEachFeature: function (feature, layer) {
       if (feature.properties) {
         // Attempt to find the postcode for the suburb
         const suburbKey = `${feature.properties.vic_loca_2.toUpperCase()},VIC`; // Ensure matching format
         const postcode = suburbPostcodes[suburbKey];
     
-        const info = `ID: ${feature.properties.lc_ply_pid}<br>
-                        Location: ${feature.properties.vic_loca_2}<br>
-                        Postcode: ${postcode || 'Not available'}<br>
-                        Created: ${feature.properties.dt_create}<br>
-                        Retired: ${feature.properties.dt_retire ? feature.properties.dt_retire : 'N/A'}`;
+        const info = `Suburb: ${feature.properties.vic_loca_2}<br>
+                      Postcode: ${postcode || 'Not available'}<br>`;
     
         layer.bindTooltip(info, { permanent: false, direction: 'auto' });
     
         layer.on({
           mouseover: function (e) {
             var layer = e.target;
-            layer.setStyle({
-              weight: 1,
-              // color: '#666',
-              dashArray: '',
-              fillOpacity: 0.7
-            });
+            if (!selectedSuburbs.includes(feature.properties.vic_loca_2)) {
+              layer.setStyle({
+                fillOpacity: 0.2
+              });
+            }
             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
               layer.bringToFront();
             }
@@ -74,11 +78,16 @@ loadGeoJson('suburb-10-vic.geojson').then(data => {
             // Toggle selection
             if (selectedSuburbs.includes(feature.properties.vic_loca_2)) {
               selectedSuburbs = selectedSuburbs.filter(id => id !== feature.properties.vic_loca_2);
-              layer.setStyle({ fillColor: '#3388ff' }); // Deselect style
+              layer.setStyle({ 
+                fillColor: '' 
+              }); // Deselect style
               console.log(layer);
             } else {
               selectedSuburbs.push(feature.properties.vic_loca_2);
-              layer.setStyle({ fillColor: '#ff7800' }); // Select style
+              layer.setStyle({ 
+                fillColor: '#ff7800',
+                fillOpacity: 0.5
+              }); // Select style
             }
           }
         });
