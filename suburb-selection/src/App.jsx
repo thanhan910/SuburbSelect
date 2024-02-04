@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SuburbsTable from './SuburbsTable';
 import PostcodesTable from './PostcodesTable';
-import { downloadSelectedSuburbs } from './utils';
+import { downloadSelectedSuburbsAndPostcodes } from './utils';
 import './App.css';
 
 function App() {
@@ -33,6 +33,9 @@ function App() {
   return (
     <div className="app">
       <div className="sidebar">
+        <button onClick={() => downloadSelectedSuburbsAndPostcodes(selectedSuburbs, postcodeData)}>
+          Download Selected
+        </button>
         <SuburbsTable
           suburbs={suburbs}
           selectedSuburbs={selectedSuburbs}
@@ -44,11 +47,8 @@ function App() {
           postcodeData={postcodeData}
           toggleSuburbSelection={toggleSuburbSelection}
         />
-        <button onClick={() => downloadSelectedSuburbs(selectedSuburbs, postcodeData)}>
-          Download Selected
-        </button>
       </div>
-      <MapContainer center={[-37.8136, 144.9631]} zoom={10} style={{ height: "100vh", width: "calc(100% - 250px)", float: "right" }}>
+      <MapContainer center={[-37.8136, 144.9631]} zoom={10} style={{ height: "100vh", width: "100%", float: "right" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
@@ -57,10 +57,10 @@ function App() {
             key={index}
             data={suburb}
             eventHandlers={{
-              click: () => toggleSuburbSelection(suburb.properties.name),
+              click: () => toggleSuburbSelection(suburb.properties.vic_loca_2),
             }}
             style={() => ({
-              color: selectedSuburbs.has(suburb.properties.name) ? "#ff7800" : "#3388ff",
+              color: selectedSuburbs.has(suburb.properties.vic_loca_2) ? "#ff7800" : "#3388ff",
             })}
           />
         ))}

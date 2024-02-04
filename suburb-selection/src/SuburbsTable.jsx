@@ -7,10 +7,10 @@ function SuburbsTable({ suburbs, selectedSuburbs, toggleSuburbSelection }) {
         <div key={index}>
           <input
             type="checkbox"
-            checked={selectedSuburbs.has(suburb.properties.name)}
-            onChange={() => toggleSuburbSelection(suburb.properties.name)}
+            checked={selectedSuburbs.has(suburb.properties.vic_loca_2)}
+            onChange={() => toggleSuburbSelection(suburb.properties.vic_loca_2)}
           />
-          {suburb.properties.name}
+          {suburb.properties.vic_loca_2}
         </div>
       ))}
     </div>
