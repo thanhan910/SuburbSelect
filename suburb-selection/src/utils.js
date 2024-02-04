@@ -33,7 +33,7 @@ const triggerDownload = (content, fileName) => {
 export const downloadSelectedSuburbsAndPostcodes = (selectedSuburbs, postcodeData) => {
   const headers = ['Suburb', 'Postcode'];
   const data = Array.from(selectedSuburbs).map(suburbName => {
-    const postcode = postcodeData[suburbName] || 'Unknown';
+    const postcode = postcodeData[`${suburbName},VIC`] || 'Unknown';
     return { Suburb: suburbName, Postcode: postcode };
   });
 
