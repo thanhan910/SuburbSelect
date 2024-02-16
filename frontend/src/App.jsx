@@ -1,16 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, GeoJSON, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Tooltip, useMap  } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SuburbsTable from './SuburbsTable';
 import PostcodesTable from './PostcodesTable';
 import { downloadSelectedSuburbsAndPostcodes } from './utils';
 import './App.css';
 
+
+function MapFocus({ center, bounds }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center && bounds) {
+      // Fly to the center of the bounds
+      map.flyTo(center, map.getZoom(), {
+        animate: true,
+        duration: 0.5 // Animation duration in seconds
+      });
+
+      // After a delay, fit the map to the bounds
+      // This delay allows the flyTo animation to complete before fitting to bounds
+      setTimeout(() => {
+        map.fitBounds(bounds, {
+          padding: [50, 50] // Adjust padding to ensure the bounds fit well within the view
+        });
+      }, 500); // Delay in milliseconds, adjust based on the duration of flyTo
+    }
+  }, [center, bounds, map]);
+
+  return null;
+}
+
+
+
 function App() {
   const [suburbs, setSuburbs] = useState([]);
   const [suburbSelected, setSuburbSelected] = useState({});
   const [postcodeData, setPostcodeData] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
+  const [mapFocus, setMapFocus] = useState(null);
 
   useEffect(() => {
     // Create promises for each fetch operation
@@ -36,10 +63,18 @@ function App() {
   
 
   const toggleSuburbSelection = (suburbIndex) => {
-    if (!suburbSelected[suburbIndex]) {
-      setSuburbSelected({ ...suburbSelected, [suburbIndex]: true });
+    const newSelection = !suburbSelected[suburbIndex];
+    setSuburbSelected({ ...suburbSelected, [suburbIndex]: newSelection });
+
+    if (newSelection) {
+      const suburb = suburbs[suburbIndex];
+      const bounds = L.geoJSON(suburb).getBounds();
+      const center = bounds.getCenter();
+      // Update to include both center and bounds
+      setMapFocus({center: [center.lat, center.lng], bounds: bounds});
     } else {
-      setSuburbSelected({ ...suburbSelected, [suburbIndex]: false });
+      // Reset map focus when deselection happens
+      setMapFocus(null);
     }
   };
 
@@ -108,6 +143,8 @@ function App() {
             </Tooltip>
           </GeoJSON>
         ))}
+        {/* Conditional rendering to focus map */}
+        {mapFocus && <MapFocus center={mapFocus.center} bounds={mapFocus.bounds} />}
       </MapContainer>
     </div>
   );
