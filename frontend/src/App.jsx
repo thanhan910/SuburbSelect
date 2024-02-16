@@ -28,7 +28,7 @@ function App() {
         acc[index] = postcodesData[`${suburbName},VIC`] || '';
         return acc;
       }, {});
-      
+
       setSuburbs(sortedSuburbs);
       setPostcodeData(postcodeData);
     });
@@ -51,12 +51,14 @@ function App() {
   return (
     <div className="app">
       <div className="sidebar">
-        <button onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}>
-          Download selected
-        </button>
-        <button onClick={resetSuburbSelection}>
-          Reset selection
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <button onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}>
+            Download
+          </button>
+          <button onClick={resetSuburbSelection}>
+            Reset
+          </button>
+        </div>
         <input
           type="text"
           placeholder="Search suburbs by name or postcode"
