@@ -19,11 +19,20 @@ function MapFocus({ center, bounds }) {
 
       // After a delay, fit the map to the bounds
       // This delay allows the flyTo animation to complete before fitting to bounds
+
+      // Only fit bounds if the map is smaller than the bounds, or if the bounds are not visible
+
+      // const mapBounds = map.getBounds();
+      // if (!mapBounds.contains(bounds) || !mapBounds.intersects(bounds)) {
+      //   bounds = L.latLngBounds(mapBounds.getSouthWest(), mapBounds.getNorthEast()).extend(bounds.getSouthWest()).extend(bounds.getNorthEast());
+      // }
       setTimeout(() => {
         map.fitBounds(bounds, {
-          padding: [50, 50] // Adjust padding to ensure the bounds fit well within the view
+          animate: true,
+          padding: [60, 60] // Adjust padding to ensure the bounds fit well within the view
         });
       }, 500); // Delay in milliseconds, adjust based on the duration of flyTo
+      
     }
   }, [center, bounds, map]);
 
