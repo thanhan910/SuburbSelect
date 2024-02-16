@@ -8,7 +8,7 @@ import './App.css';
 
 function App() {
   const [suburbs, setSuburbs] = useState([]);
-  const [selectedSuburbs, setSelectedSuburbs] = useState(new Set());
+  const [selectedSuburbs, setSelectedSuburbs] = useState([]);
   const [postcodeData, setPostcodeData] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -22,13 +22,18 @@ function App() {
   }, []);
 
   const toggleSuburbSelection = (suburbName) => {
-    const newSelection = new Set(selectedSuburbs);
-    if (newSelection.has(suburbName)) {
-      newSelection.delete(suburbName);
+    if (selectedSuburbs.includes(suburbName)) {
+      setSelectedSuburbs(selectedSuburbs.filter((selectedSuburb) => selectedSuburb !== suburbName));
     } else {
-      newSelection.add(suburbName);
+      setSelectedSuburbs([...selectedSuburbs, suburbName]);
     }
-    setSelectedSuburbs(newSelection);
+    // const newSelection = new Set(selectedSuburbs);
+    // if (newSelection.has(suburbName)) {
+    //   newSelection.delete(suburbName);
+    // } else {
+    //   newSelection.add(suburbName);
+    // }
+    // setSelectedSuburbs(newSelection);
   };
 
   return (
@@ -39,10 +44,11 @@ function App() {
         </button>
         <input
           type="text"
-          placeholder="Search suburbs..."
+          placeholder="Search suburbs by name or postcode"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: '100%', padding: '10px', marginBottom: '20px', boxSizing: 'border-box' }}
+          style={{ width: '100%', padding: '10px', marginBottom: '20px', boxSizing: 'border-box', color: 'black', backgroundColor: 'transparent', border: '1px solid #ccc'
+         }}
         />
         <SuburbsTable
           suburbs={suburbs}
@@ -70,7 +76,7 @@ function App() {
               click: () => toggleSuburbSelection(suburb.properties.vic_loca_2),
             }}
             style={() => {
-              const selected = selectedSuburbs.has(suburb.properties.vic_loca_2);
+              const selected = selectedSuburbs.includes(suburb.properties.vic_loca_2);
               return ({
                 weight: 1,
                 color: "#000000",

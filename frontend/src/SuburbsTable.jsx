@@ -13,8 +13,8 @@ function SuburbsTable({ suburbs, selectedSuburbs, postcodeData, toggleSuburbSele
   );
   // Put selected suburbs at the top of the list
   filteredSuburbs.sort((a, b) => {
-    if (selectedSuburbs.has(a.properties.vic_loca_2)) return -1;
-    if (selectedSuburbs.has(b.properties.vic_loca_2)) return 1;
+    if (selectedSuburbs.includes(a.properties.vic_loca_2)) return -1;
+    if (selectedSuburbs.includes(b.properties.vic_loca_2)) return 1;
     return a.properties.vic_loca_2.localeCompare(b.properties.vic_loca_2);
   });
 
@@ -24,12 +24,15 @@ function SuburbsTable({ suburbs, selectedSuburbs, postcodeData, toggleSuburbSele
         const suburb_name = suburb.properties.vic_loca_2;
         const postcode = postcodeData[`${suburb_name},VIC`];
         return (
-        <div key={index}>
-          <input
-            type="checkbox"
-            checked={selectedSuburbs.has(suburb_name)}
-            onChange={() => toggleSuburbSelection(suburb_name)}
-          />
+        <div 
+          key={index}
+          onClick={() => toggleSuburbSelection(suburb_name)}
+          style={{
+            backgroundColor: selectedSuburbs.includes(suburb_name) ? '#ff780050' : 'transparent',
+            padding: '10px',
+            cursor: 'pointer',
+          }}
+        >
           {suburb_name} {postcode}
         </div>
       )})}
