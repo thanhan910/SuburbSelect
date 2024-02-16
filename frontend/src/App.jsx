@@ -13,28 +13,27 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('suburb-10-vic.geojson')
-      .then((response) => response.json())
-      .then((suburbsdata) => {
-        setSuburbs(suburbsdata.features.sort((a, b) => a.properties.vic_loca_2.localeCompare(b.properties.vic_loca_2)));
-        fetch('postcode-data.json')
-          .then((response) => response.json())
-          .then((postcodesdata) => {
-            const postcode_data = {};
-            suburbs.forEach((suburb, index) => {
-              const suburbName = suburb.properties.vic_loca_2;
-              if (postcodesdata[`${suburbName},VIC`] === undefined) {
-                postcode_data[index] = '';
-                console.log(suburbName, postcodesdata, postcodesdata[`${suburbName},VIC`] === undefined);
-              }
-              else {
-                postcode_data[index] = postcodesdata[`${suburbName},VIC`];
-              }
-            });
-            setPostcodeData(postcode_data);
-          });
-      })
+    // Create promises for each fetch operation
+    const suburbsPromise = fetch('suburb-10-vic.geojson').then(response => response.json());
+    const postcodesPromise = fetch('postcode-data.json').then(response => response.json());
+  
+    // Use Promise.all to wait for both promises to resolve
+    Promise.all([suburbsPromise, postcodesPromise]).then(([suburbsData, postcodesData]) => {
+      // Sort the suburbs
+      const sortedSuburbs = suburbsData.features.sort((a, b) => a.properties.vic_loca_2.localeCompare(b.properties.vic_loca_2));
+      
+      // Map suburbs to postcodes
+      const postcodeData = sortedSuburbs.reduce((acc, suburb, index) => {
+        const suburbName = suburb.properties.vic_loca_2;
+        acc[index] = postcodesData[`${suburbName},VIC`] || '';
+        return acc;
+      }, {});
+      
+      setSuburbs(sortedSuburbs);
+      setPostcodeData(postcodeData);
+    });
   }, []);
+  
 
   const toggleSuburbSelection = (suburbIndex) => {
     if (!suburbSelected[suburbIndex]) {
