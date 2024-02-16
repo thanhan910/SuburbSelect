@@ -1,34 +1,42 @@
 import React from 'react';
 
-function SuburbsTable({ suburbs, selectedSuburbs, postcodeData, toggleSuburbSelection, searchQuery }) {
-  let filteredSuburbs = suburbs.filter((suburb) => {
+function SuburbsTable({ suburbs, suburbSelected, postcodeData, toggleSuburbSelection, searchQuery }) {
+  // Put selected suburbs at the top of the list. If both are selected, sort by name.
+  // suburbSelected is a map of suburb index to boolean
+  const suburbIndexPairs = suburbs.map((suburb, index) => [suburb, index]);
+
+  const sortedSuburbs = suburbIndexPairs.sort((a, b) => {
+    const [suburb_a, index_a] = a;
+    const [suburb_b, index_b] = b;
+    if (suburbSelected[index_a] && !suburbSelected[index_b]) return -1;
+    if (!suburbSelected[index_a] && suburbSelected[index_b]) return 1;
+    return suburb_a.properties.vic_loca_2.localeCompare(suburb_b.properties.vic_loca_2);
+  });
+
+  // Filter the suburbs based on the search query
+  const filteredSuburbs = sortedSuburbs.filter((suburb) => {
     if (searchQuery === '') return true;
     searchQuery = searchQuery.toLowerCase();
-    const suburb_name = suburb.properties.vic_loca_2;
-    const postcode = postcodeData[`${suburb_name},VIC`];
-    if (postcode === undefined) console.log(suburb_name, postcodeData, postcodeData[`${suburb_name},VIC`] === undefined);
+    const suburb_name = suburb[0].properties.vic_loca_2;
+    const postcode = postcodeData[suburb[1]];
+    if (postcode === undefined) console.log(suburb_name, postcodeData, postcodeData[suburb[1]] === undefined);
     if (suburb_name.toLowerCase().includes(searchQuery)) return true;
     if (postcode && postcode.includes(searchQuery)) return true;
-  }
-  );
-  // Put selected suburbs at the top of the list
-  filteredSuburbs.sort((a, b) => {
-    if (selectedSuburbs.includes(a.properties.vic_loca_2)) return -1;
-    if (selectedSuburbs.includes(b.properties.vic_loca_2)) return 1;
-    return a.properties.vic_loca_2.localeCompare(b.properties.vic_loca_2);
   });
 
   return (
     <div className="suburbs-table">
       {filteredSuburbs.map((suburb, index) => {
-        const suburb_name = suburb.properties.vic_loca_2;
-        const postcode = postcodeData[`${suburb_name},VIC`];
+        const suburb_name = suburb[0].properties.vic_loca_2;
+        const suburb_id = suburb[1];
+        const postcode = postcodeData[suburb[1]];
+        const selected = suburbSelected[suburb[1]];
         return (
         <div 
           key={index}
-          onClick={() => toggleSuburbSelection(suburb_name)}
+          onClick={() => toggleSuburbSelection(suburb_id)}
           style={{
-            backgroundColor: selectedSuburbs.includes(suburb_name) ? '#ff780050' : 'transparent',
+            backgroundColor: selected ? '#ff780050' : 'transparent',
             padding: '10px',
             cursor: 'pointer',
           }}

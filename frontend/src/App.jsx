@@ -8,58 +8,67 @@ import './App.css';
 
 function App() {
   const [suburbs, setSuburbs] = useState([]);
-  const [selectedSuburbs, setSelectedSuburbs] = useState([]);
+  const [suburbSelected, setSuburbSelected] = useState({});
   const [postcodeData, setPostcodeData] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetch('suburb-10-vic.geojson')
       .then((response) => response.json())
-      .then((data) => setSuburbs(data.features));
-    fetch('postcode-data.json')
-      .then((response) => response.json())
-      .then((data) => setPostcodeData(data));
+      .then((suburbsdata) => {
+        setSuburbs(suburbsdata.features.sort((a, b) => a.properties.vic_loca_2.localeCompare(b.properties.vic_loca_2)));
+        fetch('postcode-data.json')
+          .then((response) => response.json())
+          .then((postcodesdata) => {
+            const postcode_data = {};
+            suburbs.forEach((suburb, index) => {
+              const suburbName = suburb.properties.vic_loca_2;
+              if (postcodesdata[`${suburbName},VIC`] === undefined) {
+                postcode_data[index] = '';
+                console.log(suburbName, postcodesdata, postcodesdata[`${suburbName},VIC`] === undefined);
+              }
+              else {
+                postcode_data[index] = postcodesdata[`${suburbName},VIC`];
+              }
+            });
+            setPostcodeData(postcode_data);
+          });
+      })
   }, []);
 
-  const toggleSuburbSelection = (suburbName) => {
-    if (selectedSuburbs.includes(suburbName)) {
-      setSelectedSuburbs(selectedSuburbs.filter((selectedSuburb) => selectedSuburb !== suburbName));
+  const toggleSuburbSelection = (suburbIndex) => {
+    if (!suburbSelected[suburbIndex]) {
+      setSuburbSelected({ ...suburbSelected, [suburbIndex]: true });
     } else {
-      setSelectedSuburbs([...selectedSuburbs, suburbName]);
+      setSuburbSelected({ ...suburbSelected, [suburbIndex]: false });
     }
-    // const newSelection = new Set(selectedSuburbs);
-    // if (newSelection.has(suburbName)) {
-    //   newSelection.delete(suburbName);
-    // } else {
-    //   newSelection.add(suburbName);
-    // }
-    // setSelectedSuburbs(newSelection);
   };
 
   return (
     <div className="app">
       <div className="sidebar">
-        <button onClick={() => downloadSelectedSuburbsAndPostcodes(selectedSuburbs, postcodeData)}>
-          Download Selected
+        <button onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}>
+          Download selected
         </button>
         <input
           type="text"
           placeholder="Search suburbs by name or postcode"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: '100%', padding: '10px', marginBottom: '20px', boxSizing: 'border-box', color: 'black', backgroundColor: 'transparent', border: '1px solid #ccc'
-         }}
+          style={{
+            width: '100%', padding: '10px', marginBottom: '20px', boxSizing: 'border-box', color: 'black', backgroundColor: 'transparent', border: '1px solid #ccc'
+          }}
         />
         <SuburbsTable
           suburbs={suburbs}
-          selectedSuburbs={selectedSuburbs}
+          suburbSelected={suburbSelected}
           postcodeData={postcodeData}
           toggleSuburbSelection={toggleSuburbSelection}
           searchQuery={searchQuery}
         />
         <PostcodesTable
           suburbs={suburbs}
-          selectedSuburbs={selectedSuburbs}
+          suburbSelected={suburbSelected}
           postcodeData={postcodeData}
           toggleSuburbSelection={toggleSuburbSelection}
         />
@@ -73,10 +82,10 @@ function App() {
             key={index}
             data={suburb}
             eventHandlers={{
-              click: () => toggleSuburbSelection(suburb.properties.vic_loca_2),
+              click: () => toggleSuburbSelection(index),
             }}
             style={() => {
-              const selected = selectedSuburbs.includes(suburb.properties.vic_loca_2);
+              const selected = suburbSelected[index];
               return ({
                 weight: 1,
                 color: "#000000",
@@ -86,7 +95,7 @@ function App() {
             }}
           >
             <Tooltip>
-              {suburb.properties.vic_loca_2}, {postcodeData[`${suburb.properties.vic_loca_2},VIC`] || 'VIC'}
+              {suburb.properties.vic_loca_2}, {postcodeData[index] || 'VIC'}
             </Tooltip>
           </GeoJSON>
         ))}

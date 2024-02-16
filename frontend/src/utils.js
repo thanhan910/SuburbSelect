@@ -30,13 +30,15 @@ const triggerDownload = (content, fileName) => {
  * @param {Set} selectedSuburbs - A set of selected suburb names.
  * @param {Object} postcodeData - An object mapping "suburb name,state code" to its postcode.
  */
-export const downloadSelectedSuburbsAndPostcodes = (selectedSuburbs, postcodeData) => {
-  const headers = ['Suburb', 'Postcode'];
-  const data = Array.from(selectedSuburbs).map(suburbName => {
-    const postcode = postcodeData[`${suburbName},VIC`] || 'Unknown';
-    return { Suburb: suburbName, Postcode: postcode };
+export const downloadSelectedSuburbsAndPostcodes = (suburbs, postcodeData, suburbSelected) => {
+  const headers = ['suburb', 'postcode'];
+  const data = suburbs.forEach((suburbName, index) => {
+    if (suburbSelected[index]) {
+      const postcode = postcodeData[`${suburbName},VIC`] || 'Unknown';
+      return { suburb: suburbName, postcode: postcode };
+    }
   });
 
   const csvString = generateCSVString(data, headers);
-  triggerDownload(csvString, 'SelectedSuburbsAndPostcodes.csv');
+  triggerDownload(csvString, 'selected-suburbs-and-postcodes.csv');
 };
