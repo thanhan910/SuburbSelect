@@ -62,11 +62,11 @@ function App() {
   }, []);
   
 
-  const toggleSuburbSelection = (suburbIndex) => {
+  const toggleSuburbSelection = (suburbIndex, mapfocus = true) => {
     const newSelection = !suburbSelected[suburbIndex];
     setSuburbSelected({ ...suburbSelected, [suburbIndex]: newSelection });
 
-    if (newSelection) {
+    if (newSelection && mapfocus) {
       const suburb = suburbs[suburbIndex];
       const bounds = L.geoJSON(suburb).getBounds();
       const center = bounds.getCenter();
@@ -126,7 +126,7 @@ function App() {
             key={index}
             data={suburb}
             eventHandlers={{
-              click: () => toggleSuburbSelection(index),
+              click: () => toggleSuburbSelection(index, false),
             }}
             style={() => {
               const selected = suburbSelected[index];
