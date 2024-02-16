@@ -1,9 +1,57 @@
-import React from 'react';
+import { React, useState } from 'react';
 
 function SuburbsTable({ suburbs, suburbSelected, postcodeData, toggleSuburbSelection, searchQuery }) {
   // Put selected suburbs at the top of the list. If both are selected, sort by name.
   // suburbSelected is a map of suburb index to boolean
   const suburbIndexPairs = suburbs.map((suburb, index) => [suburb, index]);
+
+  const [sortOption, setSortOption] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  const handleSort = (option) => {
+    if (sortOption === option) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortOption(option);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortSuburbs = (suburbs) => {
+    if (sortOption === 'postcode') {
+      return suburbs.sort((a, b) => {
+        const postcodeA = postcodeData[a[1]];
+        const postcodeB = postcodeData[b[1]];
+        // Put suburbs without postcode at the bottom
+        if (postcodeA === undefined || postcodeA === null || postcodeA === '') return 1;
+        if (postcodeB === undefined || postcodeB === null || postcodeB === '') return -1;
+        if (sortOrder === 'asc') {
+          return postcodeA - postcodeB;
+        } else {
+          return postcodeB - postcodeA;
+        }
+      });
+    } else if (sortOption === 'selected') {
+      return suburbs.sort((a, b) => {
+        const selectedA = suburbSelected[a[1]];
+        const selectedB = suburbSelected[b[1]];
+        if (selectedA === selectedB) {
+          return 0;
+        } else if (sortOrder === 'asc') {
+          return selectedA ? -1 : 1;
+        } else {
+          return selectedA ? 1 : -1;
+        }
+      });
+    } else {
+      // Default sorting by suburb name
+      return suburbs.sort((a, b) => {
+        const suburbNameA = a[0].properties.vic_loca_2;
+        const suburbNameB = b[0].properties.vic_loca_2;
+        return sortOrder === 'asc' ? suburbNameA.localeCompare(suburbNameB) : suburbNameB.localeCompare(suburbNameA);
+      });
+    }
+  };
 
   const sortedSuburbs = suburbIndexPairs.sort((a, b) => {
     const [suburb_a, index_a] = a;
@@ -26,7 +74,12 @@ function SuburbsTable({ suburbs, suburbSelected, postcodeData, toggleSuburbSelec
 
   return (
     <div className="suburbs-table">
-      {filteredSuburbs.map((suburb, index) => {
+      <select name="suburb" id="suburb" onChange={(e) => handleSort(e.target.value)}>
+        <option value="name">Sort by Name</option>
+        <option value="postcode">Sort by Postcode</option>
+        <option value="selected">Sort by Selected</option>
+      </select>
+      {sortSuburbs(filteredSuburbs).map((suburb, index) => {
         const suburb_name = suburb[0].properties.vic_loca_2;
         const suburb_id = suburb[1];
         const postcode = postcodeData[suburb[1]];
