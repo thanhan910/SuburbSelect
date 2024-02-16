@@ -19,5 +19,11 @@ jobs:
     - name: Install Dependencies
       run: cd frontend && npm install
 
+    - name: Configure Git
+      run: |
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git config user.name "${{ github.actor }}"
+
+
     - name: Deploy the React app on GitHub Pages
       run: cd frontend && npm run deploy
