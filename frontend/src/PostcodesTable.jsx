@@ -10,7 +10,7 @@ function PostcodesTable({ suburbs, suburbSelected, postcodeData, toggleSuburbSel
   return (
     <div className="postcodes-table">
       {/* Placeholder for actual postcode list rendering */}
-      <p>Postcode table here</p>
+      <p></p>
     </div>
   );
 }
