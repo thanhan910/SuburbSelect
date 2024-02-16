@@ -44,11 +44,19 @@ function App() {
     }
   };
 
+
+  const resetSuburbSelection = () => {
+    setSuburbSelected({});
+  };
+
   return (
     <div className="app">
       <div className="sidebar">
         <button onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}>
           Download selected
+        </button>
+        <button onClick={resetSuburbSelection}>
+          Reset selection
         </button>
         <input
           type="text"

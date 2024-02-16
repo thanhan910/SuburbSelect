@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PostcodesTable({ suburbs, selectedSuburbs, postcodeData, toggleSuburbSelection }) {
+function PostcodesTable({ suburbs, suburbSelected, postcodeData, toggleSuburbSelection }) {
   // Implement logic to handle partial and full selection of postcodes based on selectedSuburbs
   // This is a simplified placeholder; actual implementation will depend on your data structure
   const handlePostcodeSelection = (postcode) => {
