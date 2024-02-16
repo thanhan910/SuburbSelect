@@ -26,4 +26,6 @@ jobs:
 
 
     - name: Deploy the React app on GitHub Pages
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: cd frontend && npm run deploy
