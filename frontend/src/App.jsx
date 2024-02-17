@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { AppContext } from './AppContext';
 import SuburbsMap from './SuburbsMap';
+import SideBar from './SideBar';
 
 import './App.css';
 
