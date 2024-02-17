@@ -1,26 +1,7 @@
 import json
 import requests
-
-def parse_postcode_file(file_path):
-    """
-    Parses a text file containing suburb, state, and postcode information
-    into a Python dictionary.
-
-    Args:
-        file_path (str): The path to the text file to be parsed.
-
-    Returns:
-        dict: A dictionary with (suburb, state) as keys and postcode as values.
-    """
-    postcode_dict = {}
-    with open(file_path, 'r') as file:
-        for line in file:
-            parts = line.strip().split(',')
-            if len(parts) == 3:
-                suburb, state, postcode = parts
-                key = f"{suburb.upper()},{state.upper()}"  # Create a unique key
-                postcode_dict[key] = postcode
-    return postcode_dict
+import pandas as pd
+import geopandas as gpd
 
 def save_to_json(data, output_file):
     """
@@ -45,6 +26,29 @@ def download_file(url, output_file):
     with open(output_file, 'wb') as file:
         file.write(response.content)
 
+def transform_geojson(geojson_file: str, postcode_file: str, output_geojson_file: str):
+
+    df = pd.read_csv(postcode_file, header=None, names=['suburb', 'state', 'postcode'], dtype={'suburb': str, 'state': str, 'postcode': str})
+    
+    gdf = gpd.read_file(geojson_file)
+
+    df_add = pd.DataFrame({'suburb': ['AINTREE', 'BONNIE BROOK', 'CREEK VIEW', 'THORNHILL PARK'], 'state': ['VIC', 'VIC', 'VIC', 'VIC'], 'postcode': ['3336', '3335', '3551', '3335']})
+    
+    df = pd.concat([df, df_add])
+
+    dfx = df.dropna(subset=['postcode']).groupby(['suburb', 'state'])['postcode'].apply(lambda x: ', '.join(x)).reset_index()
+    dfx = dfx[dfx['state'] == 'VIC']
+    gdfx = pd.merge(gdf, dfx, left_on='vic_loca_2', right_on='suburb', how='left')
+    gdfx['vic_loca_4'].fillna(gdfx['postcode'], inplace=True)
+
+    gdfx['name'] = gdfx['vic_loca_2']
+    gdfx['postcode'] = gdfx['vic_loca_4']
+    gdfx['id'] = gdfx['loc_pid']
+
+    gdfx = gdfx[['id', 'name', 'postcode', 'geometry']]
+
+    gdfx.to_file(output_geojson_file, driver='GeoJSON')
+
 
 if __name__ == '__main__':
     # Download a geojson file from the internet
@@ -52,8 +56,6 @@ if __name__ == '__main__':
 
     # Parse the postcode data
     download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/postcode-dataout.txt', 'postcode-dataout.txt')
-    output_file = 'postcode-data.json'
-    postcode_data = parse_postcode_file('postcode-dataout.txt')
 
-    # Save the parsed data to a JSON file
-    save_to_json(postcode_data, output_file)
+    # Transform the geojson file
+    transform_geojson('suburb-10-vic.geojson', 'postcode-dataout.txt', 'suburbs-vic.geojson')
