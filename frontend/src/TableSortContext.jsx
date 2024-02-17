@@ -29,11 +29,7 @@ const TableSortContextProvider = ({ children }) => {
         // Put suburbs without postcode at the bottom
         if (postcodeA === undefined || postcodeA === null || postcodeA === '') return 1;
         if (postcodeB === undefined || postcodeB === null || postcodeB === '') return -1;
-        if (sortOrder === 'asc') {
-          return postcodeA - postcodeB;
-        } else {
-          return postcodeB - postcodeA;
-        }
+        return sortOrder === 'asc' ? postcodeA.localeCompare(postcodeB) : postcodeB.localeCompare(postcodeA);
       });
     } else if (sortOption === 'name') {
       return suburbs.sort((a, b) => {
