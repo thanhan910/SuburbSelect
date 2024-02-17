@@ -1,0 +1,41 @@
+{
+    "type": "Feature",
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    144.98502345,
+                    -37.84568757
+                ],
+                [
+                    144.97741995,
+                    -37.83716103
+                ],
+                [
+                    144.98030704,
+                    -37.84506201
+                ],
+                [
+                    144.98502345,
+                    -37.84568757
+                ]
+            ]
+        ]
+    },
+    "properties": {
+        "lc_ply_pid": "10519",
+        "dt_create": "2017-02-27Z",
+        "dt_retire": null,
+        "loc_pid": "VIC1634",
+        "vic_locali": "2017-05-02Z",
+        "vic_loca_1": null,
+        "vic_loca_2": "MELBOURNE",
+        "vic_loca_3": null,
+        "vic_loca_4": null,
+        "vic_loca_5": "G",
+        "vic_loca_6": null,
+        "vic_loca_7": "2"
+    },
+    "id": "ckan_af33dd8c_0534_4e18_9245_fc64440f742e.517"
+}
