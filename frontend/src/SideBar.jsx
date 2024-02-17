@@ -5,6 +5,8 @@ import SearchBar from './SearchBar';
 import SuburbsTable from './SuburbsTable';
 import PostcodesTable from './PostcodesTable';
 import { downloadSelectedSuburbsAndPostcodes } from './utils';
+import { TableSortContextProvider } from './TableSortContext';
+import SortToggler from './SortToggler';
 
 export default function SideBar() {
   const { suburbs, suburbSelected, postcodeData, searchQuery, setSearchQuery, resetSuburbSelection } = useContext(AppContext);
@@ -20,7 +22,10 @@ export default function SideBar() {
         </button>
       </div>
       <SearchBar />
-      <SuburbsTable />
+      <TableSortContextProvider>
+        <SortToggler />
+        <SuburbsTable />
+      </TableSortContextProvider>
     </div>
   );
 }
