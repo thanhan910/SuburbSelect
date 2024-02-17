@@ -1,3 +1,4 @@
+import os
 import json
 import requests
 import pandas as pd
@@ -14,7 +15,7 @@ def save_to_json(data, output_file):
     with open(output_file, 'w') as file:
         json.dump(data, file)
 
-def download_file(url, output_file):
+def download_file(url, output_folder, output_filename):
     """
     Downloads a file from the internet.
 
@@ -23,7 +24,13 @@ def download_file(url, output_file):
         output_file (str): The path to the output file.
     """
     response = requests.get(url)
-    with open(output_file, 'wb') as file:
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    output_filepath = os.path.join(output_folder, output_filename)
+
+    with open(output_filepath, 'wb') as file:
         file.write(response.content)
 
 def transform_geojson(geojson_file: str, postcode_file: str, output_geojson_file: str):
@@ -51,20 +58,18 @@ def transform_geojson(geojson_file: str, postcode_file: str, output_geojson_file
 
 
 if __name__ == '__main__':
-    # Data source: https://github.com/tonywr71/GeoJson-Data
+    # Data sources: 
+    # - https://github.com/tonywr71/GeoJson-Data
+    # - https://www.matthewproctor.com/australian_postcodes
 
     # Download geojson files
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-act.geojson', 'suburb-10-act.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-nsw.geojson', 'suburb-10-nsw.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-nt.geojson', 'suburb-10-nt.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-qld.geojson', 'suburb-10-qld.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-sa.geojson', 'suburb-10-sa.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-tas.geojson', 'suburb-10-tas.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-vic.geojson', 'suburb-10-vic.geojson')
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-wa.geojson', 'suburb-10-wa.geojson')
+    base_url = 'https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master'
+    states = ['act', 'nsw', 'nt', 'qld', 'sa', 'tas', 'vic', 'wa']
+    for state in states:
+        download_file(f'{base_url}/suburb-10-{state}.geojson', 'data/geojson', f'suburb-10-{state}.geojson')
 
     # Download postcode data
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/postcode-dataout.txt', 'postcode-dataout.txt')
-
-    # # Transform the geojson file
-    # transform_geojson('suburb-10-vic.geojson', 'postcode-dataout.txt', 'suburbs-vic.geojson')
+    download_file(f'{base_url}/postcode-dataout.txt', 'data/postcodes', 'postcode-dataout.txt')
+    
+    # Download postcode data from https://www.matthewproctor.com/australian_postcodes
+    download_file('https://www.matthewproctor.com/Content/postcodes/australian_postcodes.csv', 'data/postcodes', 'australian_postcodes.csv')
