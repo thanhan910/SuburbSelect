@@ -53,23 +53,18 @@ export default function SuburbsMap() {
               e.target.setStyle({
                 weight: 3,
               });
-              // suburb.status.hovered = true;
-              // setSuburbs([...suburbs]);
             },
             mouseout: (e) => {
               e.target.setStyle({
-                weight: 1,
+                weight: 0.5,
               });
-              // suburb.status.hovered = false;
-              // setSuburbs([...suburbs]);
             },
             click: () => toggleSuburbSelection(index, false),
           }}
           style={() => {
             const selected = suburb.status.selected;
-            const hovered = suburb.status.hovered;
             return ({
-              weight: hovered ? 3 : 1,
+              weight: 0.5,
               color: "#000000",
               fillColor: selected ? "#ff7800" : "#000000",
               fillOpacity: selected ? 0.5 : 0,

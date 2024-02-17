@@ -5,7 +5,7 @@ import { TableSortContext } from './TableSortContext';
 
 function SuburbsTable() {
 
-  const { suburbs, setSuburbs, toggleSuburbSelection, searchQuery } = useContext(AppContext);
+  const { suburbs, toggleSuburbSelection, searchQuery } = useContext(AppContext);
 
   const { sortSuburbs } = useContext(TableSortContext);
 
@@ -34,15 +34,6 @@ function SuburbsTable() {
           className={`table-row ${selected ? 'table-row-selected' : ''}`}
           key={index}
           onClick={() => toggleSuburbSelection(suburb_index)}
-          // When hovering over a suburb, highlight the suburb on the map
-          onMouseEnter={() => {
-            suburbs[suburb_index].status.hovered = true;
-            setSuburbs([...suburbs]);
-          }}
-          onMouseLeave={() => {
-            suburbs[suburb_index].status.hovered = false;
-            setSuburbs([...suburbs]);
-          }}
         >
           {suburb_name}{postcode ? `, ${postcode}` : ''}
         </div>
