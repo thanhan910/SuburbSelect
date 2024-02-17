@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
+import { AppContext } from './AppContext';
+
 export default function SearchBar() {
     const { searchQuery, setSearchQuery } = useContext(AppContext);
   

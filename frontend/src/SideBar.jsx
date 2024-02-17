@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 
+import { AppContext } from './AppContext';
 import SearchBar from './SearchBar';
 import SuburbsTable from './SuburbsTable';
 import PostcodesTable from './PostcodesTable';
