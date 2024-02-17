@@ -51,11 +51,20 @@ def transform_geojson(geojson_file: str, postcode_file: str, output_geojson_file
 
 
 if __name__ == '__main__':
-    # Download a geojson file from the internet
-    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-vic.geojson', 'suburb-10-vic.geojson')
+    # Data source: https://github.com/tonywr71/GeoJson-Data
 
-    # Parse the postcode data
+    # Download geojson files
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-act.geojson', 'suburb-10-act.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-nsw.geojson', 'suburb-10-nsw.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-nt.geojson', 'suburb-10-nt.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-qld.geojson', 'suburb-10-qld.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-sa.geojson', 'suburb-10-sa.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-tas.geojson', 'suburb-10-tas.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-vic.geojson', 'suburb-10-vic.geojson')
+    download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/suburb-10-wa.geojson', 'suburb-10-wa.geojson')
+
+    # Download postcode data
     download_file('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/postcode-dataout.txt', 'postcode-dataout.txt')
 
-    # Transform the geojson file
-    transform_geojson('suburb-10-vic.geojson', 'postcode-dataout.txt', 'suburbs-vic.geojson')
+    # # Transform the geojson file
+    # transform_geojson('suburb-10-vic.geojson', 'postcode-dataout.txt', 'suburbs-vic.geojson')
