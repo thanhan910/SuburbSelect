@@ -38,7 +38,7 @@ function MapFocus({ center, bounds }) {
 }
 
 export default function SuburbsMap() {
-  const { suburbs, suburbSelected, postcodeData, toggleSuburbSelection, mapFocus } = useContext(AppContext);
+  const { suburbs, toggleSuburbSelection, mapFocus } = useContext(AppContext);
 
   return (
     <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
@@ -50,13 +50,11 @@ export default function SuburbsMap() {
           data={suburb}
           eventHandlers={{
             mouseover: (e) => {
-              const selected = suburbSelected[index];
               e.target.setStyle({
                 weight: 3,
               });
             },
             mouseout: (e) => {
-              const selected = suburbSelected[index];
               e.target.setStyle({
                 weight: 1,
               });
@@ -64,7 +62,7 @@ export default function SuburbsMap() {
             click: () => toggleSuburbSelection(index, false),
           }}
           style={() => {
-            const selected = suburbSelected[index];
+            const selected = suburb.status.selected;
             return ({
               weight: 1,
               color: "#000000",
@@ -74,7 +72,7 @@ export default function SuburbsMap() {
           }}
         >
           <Tooltip>
-            {suburb.properties.vic_loca_2}, {postcodeData[index] || 'VIC'}
+            {suburb.properties.name}{suburb.properties.postcode ? `, ${suburb.properties.postcode}` : ''}
           </Tooltip>
         </GeoJSON>
       ))}

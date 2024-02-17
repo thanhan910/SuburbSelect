@@ -5,7 +5,7 @@ import { TableSortContext } from './TableSortContext';
 
 function SuburbsTable() {
 
-  const { suburbs, suburbSelected, postcodeData, toggleSuburbSelection, searchQuery } = useContext(AppContext);
+  const { suburbs, toggleSuburbSelection, searchQuery } = useContext(AppContext);
 
   const { sortSuburbs } = useContext(TableSortContext);
 
@@ -15,8 +15,8 @@ function SuburbsTable() {
     if (searchQuery === '') return true;
       
     let searchQuery1 = searchQuery.toUpperCase();
-    const suburb_name = suburb[0].properties.vic_loca_2;
-    const postcode = postcodeData[suburb[1]];
+    const suburb_name = suburb[0].properties.name;
+    const postcode = suburb[0].properties.postcode;
 
     if (suburb_name.toUpperCase().includes(searchQuery1)) return true;
     if (postcode && postcode.includes(searchQuery1)) return true;
@@ -25,17 +25,17 @@ function SuburbsTable() {
   return (
     <div className="suburbs-table">
       {sortSuburbs(searchedSuburbs).map((suburb, index) => {
-        const suburb_name = suburb[0].properties.vic_loca_2;
-        const suburb_id = suburb[1];
-        const postcode = postcodeData[suburb[1]];
-        const selected = suburbSelected[suburb[1]];
+        const suburb_name = suburb[0].properties.name;
+        const suburb_index = suburb[1];
+        const postcode = suburb[0].properties.postcode;
+        const selected = suburb[0].status.selected;
         return (
         <div 
           className={`table-row ${selected ? 'table-row-selected' : ''}`}
           key={index}
-          onClick={() => toggleSuburbSelection(suburb_id)}
+          onClick={() => toggleSuburbSelection(suburb_index)}
         >
-          {suburb_name} {postcode}
+          {suburb_name}{postcode ? `, ${postcode}` : ''}
         </div>
       )})}
     </div>

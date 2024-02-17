@@ -9,13 +9,13 @@ import { TableSortContextProvider } from './TableSortContext';
 import SortToggler from './SortToggler';
 
 export default function SideBar() {
-  const { suburbs, suburbSelected, postcodeData, searchQuery, setSearchQuery, resetSuburbSelection } = useContext(AppContext);
+  const { suburbs, resetSuburbSelection } = useContext(AppContext);
 
   return (
     <div className="sidebar">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <button 
-          onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}
+          onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs)}
           title='Download selected suburbs and postcodes as a CSV file.'
         >
           Download

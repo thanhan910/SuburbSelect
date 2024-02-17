@@ -24,8 +24,8 @@ const TableSortContextProvider = ({ children }) => {
   const sortSuburbs = (suburbs) => {
     if (sortOption === 'postcode') {
       return suburbs.sort((a, b) => {
-        const postcodeA = postcodeData[a[1]];
-        const postcodeB = postcodeData[b[1]];
+        const postcodeA = a[0].properties.postcode;
+        const postcodeB = b[0].properties.postcode;
         // Put suburbs without postcode at the bottom
         if (postcodeA === undefined || postcodeA === null || postcodeA === '') return 1;
         if (postcodeB === undefined || postcodeB === null || postcodeB === '') return -1;
@@ -37,15 +37,15 @@ const TableSortContextProvider = ({ children }) => {
       });
     } else if (sortOption === 'name') {
       return suburbs.sort((a, b) => {
-        const suburbNameA = a[0].properties.vic_loca_2;
-        const suburbNameB = b[0].properties.vic_loca_2;
+        const suburbNameA = a[0].properties.name;
+        const suburbNameB = b[0].properties.name;
         return sortOrder === 'asc' ? suburbNameA.localeCompare(suburbNameB) : suburbNameB.localeCompare(suburbNameA);
       });
     } else {
       // Default sorting by suburb selected
       return suburbs.sort((a, b) => {
-        const selectedA = suburbSelected[a[1]];
-        const selectedB = suburbSelected[b[1]];
+        const selectedA = a[0].status.selected;
+        const selectedB = b[0].status.selected;
         if (selectedA === selectedB) {
           return 0;
         } else if (sortOrder === 'asc') {

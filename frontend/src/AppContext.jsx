@@ -5,17 +5,27 @@ const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
   const [suburbs, setSuburbs] = useState([]);
-  const [suburbSelected, setSuburbSelected] = useState({});
-  const [postcodeData, setPostcodeData] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [mapFocus, setMapFocus] = useState(null);
 
   const toggleSuburbSelection = (suburbIndex, mapfocus = true) => {
-    const newSelection = !suburbSelected[suburbIndex];
-    setSuburbSelected({ ...suburbSelected, [suburbIndex]: newSelection });
+    const suburb = suburbs[suburbIndex];
+    const newSelection = !suburb.status.selected;
+
+    setSuburbs([
+      ...suburbs.slice(0, suburbIndex),
+      {
+        ...suburb,
+        status: {
+          ...suburb.status,
+          selected: !suburb.status.selected
+        }
+      },
+      ...suburbs.slice(suburbIndex + 1)
+    ]);
+
 
     if (newSelection && mapfocus) {
-      const suburb = suburbs[suburbIndex];
       const bounds = L.geoJSON(suburb).getBounds();
       const center = bounds.getCenter();
       // Update to include both center and bounds
@@ -34,10 +44,6 @@ const AppContextProvider = ({ children }) => {
     <AppContext.Provider value={{ 
       suburbs,
       setSuburbs,
-      suburbSelected,
-      setSuburbSelected,
-      postcodeData,
-      setPostcodeData,
       searchQuery,
       setSearchQuery,
       mapFocus,
