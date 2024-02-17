@@ -14,12 +14,12 @@ function SuburbsTable() {
       
     if (searchQuery === '') return true;
       
-    searchQuery = searchQuery.toLowerCase();
+    let searchQuery1 = searchQuery.toUpperCase();
     const suburb_name = suburb[0].properties.vic_loca_2;
     const postcode = postcodeData[suburb[1]];
 
-    if (suburb_name.toLowerCase().includes(searchQuery)) return true;
-    if (postcode && postcode.includes(searchQuery)) return true;
+    if (suburb_name.toUpperCase().includes(searchQuery1)) return true;
+    if (postcode && postcode.includes(searchQuery1)) return true;
   });
 
   return (
@@ -35,7 +35,6 @@ function SuburbsTable() {
           onClick={() => toggleSuburbSelection(suburb_id)}
           style={{
             backgroundColor: selected ? '#ff780050' : 'transparent',
-            padding: '10px',
             cursor: 'pointer',
           }}
         >
