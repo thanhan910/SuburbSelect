@@ -7,13 +7,11 @@ export default function SearchBar() {
   
     return (
       <input
+        className='search-bar'
         type="text"
-        placeholder="Search suburbs by name or postcode"
+        placeholder="Search by name/postcode"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        style={{
-          width: '100%', padding: '10px', marginBottom: '20px', boxSizing: 'border-box', color: 'black', backgroundColor: 'transparent', border: '1px solid #ccc'
-        }}
       />
     );
   }

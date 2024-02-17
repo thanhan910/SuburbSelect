@@ -27,7 +27,7 @@ function MapFocus({ center, bounds }) {
       setTimeout(() => {
         map.fitBounds(bounds, {
           animate: true,
-          padding: [60, 60] // Adjust padding to ensure the bounds fit well within the view
+          padding: [200, 200] // Adjust padding to ensure the bounds fit well within the view
         });
       }, 500); // Delay in milliseconds, adjust based on the duration of flyTo
       

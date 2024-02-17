@@ -14,10 +14,16 @@ export default function SideBar() {
   return (
     <div className="sidebar">
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}>
+        <button 
+          onClick={() => downloadSelectedSuburbsAndPostcodes(suburbs, postcodeData, suburbSelected)}
+          title='Download selected suburbs and postcodes as a CSV file.'
+        >
           Download
         </button>
-        <button onClick={resetSuburbSelection}>
+        <button 
+          onClick={resetSuburbSelection}
+          title='Clear selected suburbs.'
+        >
           Clear
         </button>
       </div>

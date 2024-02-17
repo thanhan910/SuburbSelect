@@ -31,12 +31,9 @@ function SuburbsTable() {
         const selected = suburbSelected[suburb[1]];
         return (
         <div 
+          className={`table-row ${selected ? 'table-row-selected' : ''}`}
           key={index}
           onClick={() => toggleSuburbSelection(suburb_id)}
-          style={{
-            backgroundColor: selected ? '#ff780050' : 'transparent',
-            cursor: 'pointer',
-          }}
         >
           {suburb_name} {postcode}
         </div>
