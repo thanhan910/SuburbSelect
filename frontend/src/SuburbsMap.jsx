@@ -44,10 +44,23 @@ export default function SuburbsMap() {
     <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {suburbs.map((suburb, index) => (
+        // Make the suburb color change to green when hovered over
         <GeoJSON
           key={index}
           data={suburb}
           eventHandlers={{
+            mouseover: (e) => {
+              const selected = suburbSelected[index];
+              e.target.setStyle({
+                weight: 3,
+              });
+            },
+            mouseout: (e) => {
+              const selected = suburbSelected[index];
+              e.target.setStyle({
+                weight: 1,
+              });
+            },
             click: () => toggleSuburbSelection(index, false),
           }}
           style={() => {
