@@ -38,7 +38,7 @@ function MapFocus({ center, bounds }) {
 }
 
 export default function SuburbsMap() {
-  const { suburbs, toggleSuburbSelection, mapFocus } = useContext(AppContext);
+  const { suburbs, setSuburbs, toggleSuburbSelection, mapFocus } = useContext(AppContext);
 
   return (
     <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
@@ -53,18 +53,23 @@ export default function SuburbsMap() {
               e.target.setStyle({
                 weight: 3,
               });
+              // suburb.status.hovered = true;
+              // setSuburbs([...suburbs]);
             },
             mouseout: (e) => {
               e.target.setStyle({
                 weight: 1,
               });
+              // suburb.status.hovered = false;
+              // setSuburbs([...suburbs]);
             },
             click: () => toggleSuburbSelection(index, false),
           }}
           style={() => {
             const selected = suburb.status.selected;
+            const hovered = suburb.status.hovered;
             return ({
-              weight: 1,
+              weight: hovered ? 3 : 1,
               color: "#000000",
               fillColor: selected ? "#ff7800" : "#000000",
               fillOpacity: selected ? 0.5 : 0,
