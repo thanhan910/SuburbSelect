@@ -1,6 +1,11 @@
-import { React, useState } from 'react';
+import React, { useState, useContext } from 'react';
 
-function SuburbsTable({ suburbs, suburbSelected, postcodeData, toggleSuburbSelection, searchQuery }) {
+import { AppContext } from './AppContext';
+
+function SuburbsTable() {
+
+  const { suburbs, suburbSelected, postcodeData, toggleSuburbSelection, searchQuery, setSearchQuery } = useContext(AppContext);
+
   // Put selected suburbs at the top of the list. If both are selected, sort by name.
   // suburbSelected is a map of suburb index to boolean
   const suburbIndexPairs = suburbs.map((suburb, index) => [suburb, index]);
