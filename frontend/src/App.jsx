@@ -10,17 +10,18 @@ function MountData() {
   const { setSuburbs } = useContext(AppContext);
 
   useEffect(() => {
-    fetch('suburbs.geojson').then(response => response.json()).then(data => {
+    fetch('suburbs-vic.geojson').then(response => response.json()).then(data => {
       data.features = data.features.sort((a, b) => {
         if (!(a.properties.postcode)) return 1;
         if (!(b.properties.postcode)) return -1;
-        a.properties.postcode.localeCompare(b.properties.postcode)
+        return a.properties.postcode.localeCompare(b.properties.postcode)
       });
       data.features.forEach((suburb) => {
         suburb.status = {
           selected: false,
           hover: false,
         }
+        suburb.properties.state = 'VIC';
       });
       setSuburbs(data.features);
     });
