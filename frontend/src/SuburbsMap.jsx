@@ -72,7 +72,7 @@ export default function SuburbsMap() {
           }}
         >
           <Tooltip>
-            {suburb.properties.name}{suburb.properties.postcode ? `, ${suburb.properties.postcode}` : ''}
+            {suburb.properties.name}, {suburb.properties.state}{suburb.properties.postcode ? `, ${suburb.properties.postcode}` : ''}
           </Tooltip>
         </GeoJSON>
       ))}

@@ -31,8 +31,12 @@ const triggerDownload = (content, fileName) => {
  * @param {Object} postcodeData - An object mapping "suburb name,state code" to its postcode.
  */
 export const downloadSelectedSuburbsAndPostcodes = (suburbs) => {
-  const headers = ['suburb', 'postcode'];
-  const data = suburbs.filter(suburb => suburb.status.selected).map(suburb => ({ suburb: suburb.properties.name, postcode: suburb.properties.postcode }));
+  const headers = ['suburb', 'state', 'postcode'];
+  const data = suburbs.filter(suburb => suburb.status.selected).map(suburb => ({ 
+    suburb: suburb.properties.name, 
+    state: suburb.properties.state,
+    postcode: suburb.properties.postcode 
+  }));
 
   const csvString = generateCSVString(data, headers);
   triggerDownload(csvString, 'selected-suburbs-and-postcodes.csv');

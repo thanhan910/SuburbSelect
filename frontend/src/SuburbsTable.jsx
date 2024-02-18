@@ -28,6 +28,7 @@ function SuburbsTable() {
         const suburb_name = suburb[0].properties.name;
         const suburb_index = suburb[1];
         const postcode = suburb[0].properties.postcode;
+        const state = suburb[0].properties.state;
         const selected = suburb[0].status.selected;
         return (
         <div 
@@ -35,7 +36,7 @@ function SuburbsTable() {
           key={index}
           onClick={() => toggleSuburbSelection(suburb_index)}
         >
-          {suburb_name}{postcode ? `, ${postcode}` : ''}
+          {suburb_name}, {state}{postcode ? `, ${postcode}` : ''}
         </div>
       )})}
     </div>
