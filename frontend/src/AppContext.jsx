@@ -37,7 +37,11 @@ const AppContextProvider = ({ children }) => {
   };
 
   const resetSuburbSelection = () => {
-    setSuburbSelected({});
+    suburbs.forEach((suburb) => {
+      suburb.status.selected = false;
+    });
+
+    setSuburbs([...suburbs]);
   };
 
   return (
