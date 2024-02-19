@@ -163,3 +163,12 @@ cython_debug/
 local-*
 .local*/
 .local-*/
+
+# Ignore all 'local' folders
+**/local/*
+
+# Ignore all '.local' folders
+**/.local/*
+
+# Ignore all 'local-' folders and files
+**/local-*
