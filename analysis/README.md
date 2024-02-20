@@ -2,6 +2,8 @@
 
 This repository contains the code and data for the analysis of Australian postcodes and GeoJson data. The analysis is done using Python.
 
+Currently, analysis using this folder has been temporarily stopped. The analysis is being done in the https://github.com/thanhan910/AusGeo repository instead.
+
 ## Data sources
 
 - Australian Statistical Geography Standard (ASGS) Edition 3
