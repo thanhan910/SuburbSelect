@@ -4,6 +4,10 @@ This repository contains the code and data for the analysis of Australian postco
 
 Currently, analysis using this folder has been temporarily stopped. The analysis is being done in the https://github.com/thanhan910/AusGeo repository instead.
 
+## Use cases
+
+You can use this website to search for the location of a subur or postcode in Australia. You can also use it to find its nearby suburbs, postcodes, select them on the map, and download the selected suburbs and postcodes as a csv file. This can be useful if you want to find a list of suburbs and postcodes that you may need to explore when looking for a new place to live or do business.
+
 ## Data sources
 
 - Australian Statistical Geography Standard (ASGS) Edition 3
