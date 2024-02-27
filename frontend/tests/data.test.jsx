@@ -1,4 +1,6 @@
-import fs from 'fs'; // Assuming you have some way to read files in your testing environment
+import fs from 'fs';
+
+// Test that data syntax is correct
 
 test('GeoJSON file has properties', () => {
   // Read the GeoJSON file
