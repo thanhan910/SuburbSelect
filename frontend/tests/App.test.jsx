@@ -1,1 +1,0 @@
-// TODO: Write a test that can test the App component, which uses Leaflet
