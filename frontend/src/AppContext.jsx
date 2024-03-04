@@ -178,7 +178,9 @@ const AppContextProvider = ({ children }) => {
       files,
       setFiles,
       toggleFileDisplayed,
-      toggleSelectableFile
+      toggleSelectableFile,
+      filesData,
+      setFilesData,
     }}>
       {children}
     </AppContext.Provider>
