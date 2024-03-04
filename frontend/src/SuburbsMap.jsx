@@ -56,7 +56,7 @@ export default function SuburbsMap() {
           eventHandlers={{
             mouseover: (e) => {
               e.target.setStyle({
-                weight: 3,
+                weight: files[fileIndex].selectable ? 3 : 0.5,
               });
             },
             mouseout: (e) => {
