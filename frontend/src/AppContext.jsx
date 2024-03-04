@@ -2,14 +2,47 @@ import React, { createContext, useEffect, useState } from 'react';
 
 const AppContext = createContext();
 
+// suburbs-1GSYD.geojson
+// suburbs-2GMEL.geojson
+// suburbs-3GBRI.geojson
+// suburbs-4GADE.geojson
+// suburbs-5GPER.geojson
+// suburbs-6GHOB.geojson
+// suburbs-7GDAR.geojson
+// suburbs-8ACTE.geojson
+
 const ALL_FILES = [
   {
     name: 'Greater Melbourne',
-    path: 'suburbs-greater-melbourne.geojson',
+    path: 'suburbs-2GMEL.geojson',
   },
   {
     name: 'Greater Sydney',
-    path: 'suburbs-greater-melbourne.geojson',
+    path: 'suburbs-1GSYD.geojson',
+  },
+  {
+    name: 'Greater Brisbane',
+    path: 'suburbs-3GBRI.geojson',
+  },
+  {
+    name: 'Greater Adelaide',
+    path: 'suburbs-4GADE.geojson',
+  },
+  {
+    name: 'Greater Perth',
+    path: 'suburbs-5GPER.geojson',
+  },
+  {
+    name: 'Greater Hobart',
+    path: 'suburbs-6GHOB.geojson',
+  },
+  {
+    name: 'Greater Darwin',
+    path: 'suburbs-7GDAR.geojson',
+  },
+  {
+    name: 'Greater Canberra',
+    path: 'suburbs-8ACTE.geojson',
   }
 ];
 

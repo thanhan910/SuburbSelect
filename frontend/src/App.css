@@ -63,8 +63,8 @@
 
 .files-table {
   overflow-y: auto;
-  margin-bottom: 20px;
-  height: 10vh; /* Adjust height as needed */
+  /* margin-bottom: 20px; */
+  height: 30vh; /* Adjust height as needed */
 }
 
 .table-row {
