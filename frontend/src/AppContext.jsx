@@ -41,6 +41,10 @@ const AppContextProvider = ({ children }) => {
     if (!files[fileIndex].displayed) {
       files[fileIndex].selectable = false;
     }
+    else {
+      // load the file
+      
+    }
     setFiles([...files]);
     console.log(files);
   };
