@@ -5,8 +5,45 @@ const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
   const [suburbs, setSuburbs] = useState([]);
+  const [files, setFiles] = useState([
+    {
+      name: 'file1',
+      path: 'path1',
+      displayed: true,
+      selectable: true
+    },
+    {
+      name: 'file2',
+      path: 'path2',
+      displayed: false,
+      selectable: true
+    }
+  ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [mapFocus, setMapFocus] = useState(null);
+
+  const toggleSelectableFile = (fileIndex) => {
+    files.forEach((file, index) => {
+      if (index !== fileIndex) {
+        file.selectable = false;
+      }
+      else {
+        file.selectable = true;
+        file.displayed = true;
+      }
+    });
+    setFiles([...files]);
+  };
+
+  const toggleFileDisplayed = (fileIndex) => {
+    console.log(files[fileIndex].displayed)
+    files[fileIndex].displayed = !files[fileIndex].displayed;
+    if (!files[fileIndex].displayed) {
+      files[fileIndex].selectable = false;
+    }
+    setFiles([...files]);
+    console.log(files);
+  };
 
   const toggleSuburbSelection = (suburbIndex, mapfocus = true) => {
     const suburb = suburbs[suburbIndex];
@@ -53,7 +90,11 @@ const AppContextProvider = ({ children }) => {
       mapFocus,
       setMapFocus,
       toggleSuburbSelection, 
-      resetSuburbSelection 
+      resetSuburbSelection,
+      files,
+      setFiles,
+      toggleFileDisplayed,
+      toggleSelectableFile
     }}>
       {children}
     </AppContext.Provider>

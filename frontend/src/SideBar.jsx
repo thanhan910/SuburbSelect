@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from './AppContext';
 import SearchBar from './SearchBar';
 import SuburbsTable from './SuburbsTable';
-import PostcodesTable from './PostcodesTable';
+import FilesTable from './FilesTable';
 import { downloadSelectedSuburbsAndPostcodes } from './utils';
 import { TableSortContextProvider } from './TableSortContext';
 import SortToggler from './SortToggler';
@@ -31,6 +31,7 @@ export default function SideBar() {
       <TableSortContextProvider>
         <SortToggler />
         <SuburbsTable />
+        <FilesTable />
       </TableSortContextProvider>
     </div>
   );
