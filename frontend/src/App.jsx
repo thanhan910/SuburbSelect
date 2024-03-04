@@ -13,7 +13,7 @@ function App() {
   return (
     <AppContextProvider>
       <div className="app">
-        <MountData filepath='suburbs-greater-melbourne.geojson' />
+        {/* <MountData filepath='suburbs-greater-melbourne.geojson' /> */}
         <SideBar />
         <SuburbsMap />
       </div>

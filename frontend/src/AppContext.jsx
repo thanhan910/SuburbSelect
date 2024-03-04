@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 const AppContext = createContext();
 
@@ -16,20 +16,52 @@ const ALL_FILES = [
 
 const AppContextProvider = ({ children }) => {
   const [suburbs, setSuburbs] = useState([]);
+  const [filesData, setFilesData] = useState(ALL_FILES.map((file, index) => (null)));
   const [files, setFiles] = useState(ALL_FILES.map((file, index) => (
     index === 0 ? 
-    { ...file, displayed: true, selectable: true, loaded: true } : 
-    { ...file, displayed: false, selectable: false, loaded: false })));
+    { ...file, displayed: true, selectable: true } : 
+    { ...file, displayed: false, selectable: false })));
   const [searchQuery, setSearchQuery] = useState('');
   const [mapFocus, setMapFocus] = useState(null);
+
+  const loadFile = (fileIndex) => {
+    files[fileIndex].loaded = true;
+    fetch(files[fileIndex].path).then(response => response.json()).then(data => {
+      filesData[fileIndex] = data;
+      setFilesData([...filesData]);
+    });
+  };
+
+  useEffect(() => {
+    fetch(files[0].path).then(response => response.json()).then(data => {
+      filesData[0] = data;
+      setFilesData([...filesData]);
+      data.features = data.features.sort((a, b) => {
+        if (!(a.properties.postcode)) return 1;
+        if (!(b.properties.postcode)) return -1;
+        return a.properties.postcode.localeCompare(b.properties.postcode)
+      });
+      data.features.forEach((suburb) => {
+        suburb.status = {
+          selected: false,
+          hover: false,
+        }
+        suburb.properties.name = suburb.properties.suburb || suburb.properties.name;
+        suburb.properties.state = 'VIC';
+      });
+      setSuburbs(data.features);
+    });
+  }, []);
+
 
   const toggleSelectableFile = (fileIndex) => {
     files.forEach((file, index) => {
       if (index === fileIndex) {
         file.selectable = true;
         file.displayed = true;
-        if (!file.loaded) {
-          file.loaded = true;
+        if (filesData[fileIndex] === null) {
+          // load file if not already loaded
+          loadFile(fileIndex);
         }
       }
       else {
@@ -41,10 +73,9 @@ const AppContextProvider = ({ children }) => {
 
   const toggleFileDisplayed = (fileIndex) => {
     files[fileIndex].displayed = !files[fileIndex].displayed;
-    if (files[fileIndex].displayed && !files[fileIndex].loaded) {
+    if (files[fileIndex].displayed && (filesData[fileIndex] === null)) {
       // load file if not already loaded
-      // loadFile(files[fileIndex].path);
-      files[fileIndex].loaded = true;
+      loadFile(fileIndex);
     }
     else {
       files[fileIndex].selectable = false;
