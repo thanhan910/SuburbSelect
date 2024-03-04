@@ -46,7 +46,7 @@ export default function SuburbsMap() {
       {suburbs.map((suburb, index) => (
         // Make the suburb color change to green when hovered over
         <GeoJSON
-          key={index}
+          key={`${suburb.properties.name}-${suburb.properties.postcode}-${index}`}
           data={suburb}
           eventHandlers={{
             mouseover: (e) => {
