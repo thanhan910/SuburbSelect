@@ -2,51 +2,54 @@ import React, { createContext, useState } from 'react';
 
 const AppContext = createContext();
 
+const ALL_FILES = [
+  {
+    name: 'Greater Melbourne',
+    path: 'suburbs-greater-melbourne.geojson',
+  },
+  {
+    name: 'Greater Sydney',
+    path: 'suburbs-greater-melbourne.geojson',
+  }
+];
+
 
 const AppContextProvider = ({ children }) => {
   const [suburbs, setSuburbs] = useState([]);
-  const [files, setFiles] = useState([
-    {
-      name: 'file1',
-      path: 'path1',
-      displayed: true,
-      selectable: true
-    },
-    {
-      name: 'file2',
-      path: 'path2',
-      displayed: false,
-      selectable: true
-    }
-  ]);
+  const [files, setFiles] = useState(ALL_FILES.map((file, index) => (
+    index === 0 ? 
+    { ...file, displayed: true, selectable: true, loaded: true } : 
+    { ...file, displayed: false, selectable: false, loaded: false })));
   const [searchQuery, setSearchQuery] = useState('');
   const [mapFocus, setMapFocus] = useState(null);
 
   const toggleSelectableFile = (fileIndex) => {
     files.forEach((file, index) => {
-      if (index !== fileIndex) {
-        file.selectable = false;
-      }
-      else {
+      if (index === fileIndex) {
         file.selectable = true;
         file.displayed = true;
+        if (!file.loaded) {
+          file.loaded = true;
+        }
+      }
+      else {
+        file.selectable = false;
       }
     });
     setFiles([...files]);
   };
 
   const toggleFileDisplayed = (fileIndex) => {
-    console.log(files[fileIndex].displayed)
     files[fileIndex].displayed = !files[fileIndex].displayed;
-    if (!files[fileIndex].displayed) {
-      files[fileIndex].selectable = false;
+    if (files[fileIndex].displayed && !files[fileIndex].loaded) {
+      // load file if not already loaded
+      // loadFile(files[fileIndex].path);
+      files[fileIndex].loaded = true;
     }
     else {
-      // load the file
-      
+      files[fileIndex].selectable = false;
     }
     setFiles([...files]);
-    console.log(files);
   };
 
   const toggleSuburbSelection = (suburbIndex, mapfocus = true) => {
