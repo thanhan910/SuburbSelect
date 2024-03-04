@@ -57,11 +57,30 @@ const AppContextProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mapFocus, setMapFocus] = useState(null);
 
+  const enrichSuburbsData = (data) => {
+    data.features = data.features.sort((a, b) => {
+      if (!(a.properties.postcode)) return 1;
+      if (!(b.properties.postcode)) return -1;
+      return a.properties.postcode.localeCompare(b.properties.postcode)
+    });
+    data.features.forEach((suburb) => {
+      suburb.status = {
+        selected: false,
+        hover: false,
+      }
+      suburb.properties.name = suburb.properties.suburb || suburb.properties.name;
+      // suburb.properties.state = 'VIC';
+    });
+    return data;
+  };
+
   const loadFile = (fileIndex) => {
     files[fileIndex].loaded = true;
     fetch(files[fileIndex].path).then(response => response.json()).then(data => {
       filesData[fileIndex] = data;
       setFilesData([...filesData]);
+      data = enrichSuburbsData(data);
+      setSuburbs(data.features);
     });
   };
 
@@ -69,19 +88,7 @@ const AppContextProvider = ({ children }) => {
     fetch(files[0].path).then(response => response.json()).then(data => {
       filesData[0] = data;
       setFilesData([...filesData]);
-      data.features = data.features.sort((a, b) => {
-        if (!(a.properties.postcode)) return 1;
-        if (!(b.properties.postcode)) return -1;
-        return a.properties.postcode.localeCompare(b.properties.postcode)
-      });
-      data.features.forEach((suburb) => {
-        suburb.status = {
-          selected: false,
-          hover: false,
-        }
-        suburb.properties.name = suburb.properties.suburb || suburb.properties.name;
-        suburb.properties.state = 'VIC';
-      });
+      data = enrichSuburbsData(data);
       setSuburbs(data.features);
     });
   }, []);
@@ -92,26 +99,32 @@ const AppContextProvider = ({ children }) => {
       if (index === fileIndex) {
         file.selectable = true;
         file.displayed = true;
-        if (filesData[fileIndex] === null) {
-          // load file if not already loaded
-          loadFile(fileIndex);
-        }
       }
       else {
         file.selectable = false;
       }
     });
+    if (filesData[fileIndex] === null) {
+      // load file if not already loaded
+      loadFile(fileIndex);
+    }
+    else {
+      setSuburbs(filesData[fileIndex].features);
+    }
     setFiles([...files]);
   };
 
   const toggleFileDisplayed = (fileIndex) => {
     files[fileIndex].displayed = !files[fileIndex].displayed;
-    if (files[fileIndex].displayed && (filesData[fileIndex] === null)) {
+    if (!files[fileIndex].displayed) {
+      files[fileIndex].selectable = false;
+    }
+    if (filesData[fileIndex] === null) {
       // load file if not already loaded
       loadFile(fileIndex);
     }
     else {
-      files[fileIndex].selectable = false;
+      setSuburbs(filesData[fileIndex].features);
     }
     setFiles([...files]);
   };
