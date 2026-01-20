@@ -38,20 +38,25 @@ function MapFocus({ center, bounds }) {
 }
 
 export default function SuburbsMap() {
-  const { suburbs, setSuburbs, toggleSuburbSelection, mapFocus } = useContext(AppContext);
+  const { suburbs, files, filesData, toggleSuburbSelection, mapFocus } = useContext(AppContext);
 
   return (
     <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {suburbs.map((suburb, index) => (
+
+      {filesData === undefined ? '' : filesData.map((data, fileIndex) => {
+        if (!files[fileIndex].displayed) return null;
+        if (data === null) return null;
+
+        return data.features.map((suburb, index) => (
         // Make the suburb color change to green when hovered over
         <GeoJSON
-          key={index}
+          key={`${fileIndex}-${index}`}
           data={suburb}
           eventHandlers={{
             mouseover: (e) => {
               e.target.setStyle({
-                weight: 3,
+                weight: files[fileIndex].selectable ? 3 : 0.5,
               });
             },
             mouseout: (e) => {
@@ -62,7 +67,10 @@ export default function SuburbsMap() {
             click: () => toggleSuburbSelection(index, false),
           }}
           style={() => {
-            const selected = suburb.status.selected;
+            let selected = suburb.status.selected;
+            if (files[fileIndex].selectable) {
+              selected = suburbs[index].status.selected;
+            }
             return ({
               weight: 0.5,
               color: "#000000",
@@ -75,7 +83,7 @@ export default function SuburbsMap() {
             {suburb.properties.name}, {suburb.properties.state}{suburb.properties.postcode ? `, ${suburb.properties.postcode}` : ''}
           </Tooltip>
         </GeoJSON>
-      ))}
+      ))})}
       {/* Conditional rendering to focus map */}
       {mapFocus && <MapFocus center={mapFocus.center} bounds={mapFocus.bounds} />}
     </MapContainer>

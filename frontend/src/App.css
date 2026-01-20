@@ -61,6 +61,12 @@
   height: 50vh; /* Adjust height as needed */
 }
 
+.files-table {
+  overflow-y: auto;
+  /* margin-bottom: 20px; */
+  height: 30vh; /* Adjust height as needed */
+}
+
 .table-row {
   padding: 2.6px 5.2px;
   font-size: 13px;

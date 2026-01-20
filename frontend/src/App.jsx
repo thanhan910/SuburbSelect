@@ -3,34 +3,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AppContext, AppContextProvider } from './AppContext';
 import SuburbsMap from './SuburbsMap';
 import SideBar from './SideBar';
+import MountData from './MountData';
 
 import './App.css';
-
-function MountData() {
-  const { setSuburbs } = useContext(AppContext);
-
-  useEffect(() => {
-    fetch('suburbs-greater-melbourne.geojson').then(response => response.json()).then(data => {
-      data.features = data.features.sort((a, b) => {
-        if (!(a.properties.postcode)) return 1;
-        if (!(b.properties.postcode)) return -1;
-        return a.properties.postcode.localeCompare(b.properties.postcode)
-      });
-      data.features.forEach((suburb) => {
-        suburb.status = {
-          selected: false,
-          hover: false,
-        }
-        suburb.properties.name = suburb.properties.suburb || suburb.properties.name;
-        suburb.properties.state = 'VIC';
-      });
-      setSuburbs(data.features);
-    });
-  }, []);
-
-  return null;
-}
-
 
 
 function App() {
@@ -38,7 +13,7 @@ function App() {
   return (
     <AppContextProvider>
       <div className="app">
-        <MountData />
+        {/* <MountData filepath='suburbs-greater-melbourne.geojson' /> */}
         <SideBar />
         <SuburbsMap />
       </div>
