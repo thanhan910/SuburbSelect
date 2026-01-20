@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -29,5 +32,5 @@ jobs:
       with:
         branch: gh-pages
         folder: frontend/dist
-        token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }} 
+        token: ${{ secrets.GITHUB_TOKEN }}
         clean: true
