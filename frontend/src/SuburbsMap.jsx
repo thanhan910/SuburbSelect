@@ -64,11 +64,19 @@ export default function SuburbsMap() {
                 weight: 0.5,
               });
             },
-            click: () => toggleSuburbSelection(index, false),
+            click: () => {
+              // Only toggle selection when this file is the selectable one
+              if (files[fileIndex].selectable) {
+                toggleSuburbSelection(index, false);
+              }
+            },
           }}
           style={() => {
-            let selected = suburb.status.selected;
-            if (files[fileIndex].selectable) {
+            // suburb.status is the feature's own status; when this file is the
+            // selectable one, the global `suburbs` array holds the authoritative
+            // selected state. Guard access to avoid crashes when indexes differ.
+            let selected = suburb && suburb.status && suburb.status.selected;
+            if (files[fileIndex].selectable && Array.isArray(suburbs) && suburbs[index] && suburbs[index].status) {
               selected = suburbs[index].status.selected;
             }
             return ({
