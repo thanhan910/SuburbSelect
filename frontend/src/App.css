@@ -58,13 +58,27 @@
 .suburbs-table, .postcodes-table {
   overflow-y: auto;
   margin-bottom: 20px;
-  height: 50vh; /* Adjust height as needed */
+  height: 100%;
 }
 
 .files-table {
   overflow-y: auto;
   /* margin-bottom: 20px; */
-  height: 30vh; /* Adjust height as needed */
+  height: 100%;
+}
+
+.resize-dragbar {
+  height: 8px;
+  background-color: #ccc;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  cursor: row-resize;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.resize-dragbar:hover {
+  background-color: #999;
 }
 
 .table-row {

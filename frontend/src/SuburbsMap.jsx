@@ -41,7 +41,7 @@ export default function SuburbsMap() {
   const { suburbs, files, filesData, toggleSuburbSelection, mapFocus } = useContext(AppContext);
 
   return (
-    <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
+    <MapContainer center={[-37.8136, 144.9631]} zoom={12} zoomSnap={0.1} wheelPxPerZoomLevel={120} scrollWheelZoom={true} style={{ height: "100vh", width: "100%", float: "right" }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       {filesData === undefined ? '' : filesData.map((data, fileIndex) => {
@@ -64,11 +64,19 @@ export default function SuburbsMap() {
                 weight: 0.5,
               });
             },
-            click: () => toggleSuburbSelection(index, false),
+            click: () => {
+              // Only toggle selection when this file is the selectable one
+              if (files[fileIndex].selectable) {
+                toggleSuburbSelection(index, false);
+              }
+            },
           }}
           style={() => {
-            let selected = suburb.status.selected;
-            if (files[fileIndex].selectable) {
+            // suburb.status is the feature's own status; when this file is the
+            // selectable one, the global `suburbs` array holds the authoritative
+            // selected state. Guard access to avoid crashes when indexes differ.
+            let selected = suburb && suburb.status && suburb.status.selected;
+            if (files[fileIndex].selectable && Array.isArray(suburbs) && suburbs[index] && suburbs[index].status) {
               selected = suburbs[index].status.selected;
             }
             return ({
