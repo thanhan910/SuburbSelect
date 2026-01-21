@@ -41,7 +41,7 @@ export default function SuburbsMap() {
   const { suburbs, files, filesData, toggleSuburbSelection, mapFocus } = useContext(AppContext);
 
   return (
-    <MapContainer center={[-37.8136, 144.9631]} zoom={12} style={{ height: "100vh", width: "100%", float: "right" }}>
+    <MapContainer center={[-37.8136, 144.9631]} zoom={12} zoomSnap={0.1} wheelPxPerZoomLevel={120} scrollWheelZoom={true} style={{ height: "100vh", width: "100%", float: "right" }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       {filesData === undefined ? '' : filesData.map((data, fileIndex) => {
